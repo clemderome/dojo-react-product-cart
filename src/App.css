@@ -14,7 +14,9 @@
 
 .App form {
   margin-top: 50px;
-  text-align: center
+  text-align: center;
+  display: flex;
+  flex-direction: column
 }
 
 .App form .field {
@@ -34,3 +36,7 @@
   text-align: center
 }
 
+.button {
+  width: 50px;
+  align-self: center;
+}
