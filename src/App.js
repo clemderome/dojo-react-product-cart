@@ -16,16 +16,19 @@ class App extends React.Component {
     ]
   }
 
-    handleChange = (e, id) => {
+  handleChange = (e, id) => {
     const newValue = this.state.ProductList.slice()
     newValue[id].quantity = e.target.value
     this.setState(({ ProductList: newValue }))
+    console.log(e.target.value)
     if (e.target.value === '0') {
-      window.confirm('Are you sure to delete that ?')
-      const productListCopy = this.state.ProductList.slice()
-      const newProductList = productListCopy.filter((product) => product.quantity !== "0") 
-      console.log(newProductList)
-      this.setState(({ ProductList: newProductList }))
+      console.log(e.target.value)
+      if (window.confirm('Are you sure to delete that ?')) {
+        const productListCopy = this.state.ProductList.slice()
+        const newProductList = productListCopy.filter((product) => product.quantity !== "0")
+        console.log(newProductList)
+        this.setState(({ ProductList: newProductList }))
+      }
     }
   }
 
@@ -43,11 +46,11 @@ class App extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.ProductList.map(({ id, name, price, quantity }) => (
+            {this.state.ProductList.map(({ id, name, price, quantity }, index) => (
               <tr key={id}>
                 <td className="name">{name}</td>
                 <td className="price">{price} €</td>
-                <td className="quantity"><input value={quantity} type="number" onChange={(e) => this.handleChange(e, id)}></input></td>
+                <td className="quantity"><input value={quantity} type="number" onChange={(e) => this.handleChange(e, index)}></input></td>
                 <td className="total">{price * quantity} €</td>
               </tr>
             ))}
