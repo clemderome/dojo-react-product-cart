@@ -1,12 +1,6 @@
 import React from 'react';
 import './App.css';
 
-// const initialProductList = [
-//   { id: 1, name: 'produit 1', price: 50, quantity: 1 },
-//   { id: 2, name: 'produit 2', price: 75, quantity: 2 },
-//   { id: 3, name: 'produit 3', price: 20, quantity: 5 }
-// ];
-
 class App extends React.Component {
   state = {
     ProductList: [
@@ -14,8 +8,12 @@ class App extends React.Component {
       { id: 1, name: 'produit 2', price: 75, quantity: 2 },
       { id: 2, name: 'produit 3', price: 20, quantity: 5 }
     ],
-    name:"",
-    price:""
+    newProduct: {
+      id:null,
+      name:"",
+      price:0,
+      quantity: 1
+    }
   }
 
   handleChange = (e, id) => {
@@ -35,17 +33,20 @@ class App extends React.Component {
   }
 
   handleSubmit = (e) => {
-    const newProduct = {id: 4, name: this.state.name, price: this.state.price, quantity: 4}
-    console.log(newProduct)
-    this.setState({ProductList: [...this.state.ProductList, newProduct]})
+    const newId = Math.max(...this.state.ProductList.map(({id}) => id))
+    
+    this.setState({newProduct: {...this.state.newProduct, id: newId + 1}}, 
+      () => this.setState({ProductList: [...this.state.ProductList, this.state.newProduct],newProduct: {...this.state.newProduct, name: "", price:""}}))
+
     e.preventDefault()
   }
 
   stateChange = (e) => {
-    this.setState({[e.target.name]: e.target.value})
+    this.setState({newProduct: {...this.state.newProduct, [e.target.name]: e.target.value}})
   }
 
   render() {
+    console.log("ProductList",this.state.ProductList)
     return (
       <div className='App'>
         <h1>Ma commande</h1>
@@ -74,11 +75,12 @@ class App extends React.Component {
           </p>
           <form>
             <h2>Ajout d'un produit</h2>
-            <label className="field">Nom : <input name="name" type="text" onChange={this.stateChange}></input></label>
-            <label className="field">Prix : <input  name="price" type="number" onChange={this.stateChange}></input></label>
+            <label className="field">Nom : <input name="name" value={this.state.newProduct.name} type="text" onChange={this.stateChange}></input></label>
+            <label className="field">Prix : <input  name="price" value={this.state.newProduct.price} type="number" onChange={this.stateChange}></input></label>
             <input className="button" type="submit" value="Ajouter" onClick={this.handleSubmit}></input>
           </form>
-
+          <p>{this.state.newProduct.name}</p>
+            <p>{this.state.newProduct.price}</p>
       </div>
     );
   }
